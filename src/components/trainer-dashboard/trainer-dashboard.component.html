@@ -7,10 +7,6 @@
         <p class="user-role">{{ user?.role | titlecase }} Dashboard</p>
       </div>
       <div class="header-actions">
-        <button class="btn btn-primary add-user-btn" (click)="addNewUser()">
-          <i class="btn-icon">👥</i>
-          Add New User
-        </button>
         <button class="btn btn-danger logout-btn" (click)="logout()">
           <i class="btn-icon">🚪</i>
           Logout
@@ -20,7 +16,7 @@
   </div>
 
   <div class="dashboard-grid">
-    <!-- Status Management Section -->
+    <!-- Gym Status Management Section -->
     <div class="status-management-section">
       <div class="card status-card">
         <div class="card-header">
@@ -43,7 +39,7 @@
             <i class="section-icon">📊</i>
             Current Status
           </h3>
-          
+
           <div *ngIf="isLoading" class="loading-spinner">
             <div class="spinner"></div>
             <p>Loading current status...</p>
@@ -143,26 +139,6 @@
       </div>
     </div>
 
-    <!-- User Management Section -->
-    <div class="user-management">
-      <div class="card user-card">
-        <div class="card-header">
-          <div class="card-icon">👥</div>
-          <h3 class="card-title">User Management</h3>
-        </div>
-        <div class="user-actions">
-          <button class="btn btn-primary add-user-main-btn" (click)="addNewUser()">
-            <i class="btn-icon">➕</i>
-            <span>Add New Student</span>
-          </button>
-          <p class="user-help-text">
-            <i class="help-icon">💡</i>
-            Click to register a new student to the gym system
-          </p>
-        </div>
-      </div>
-    </div>
-
     <!-- Trainer Guidelines Section -->
     <div class="trainer-info">
       <div class="card info-card">
@@ -186,10 +162,6 @@
           <li>
             <i class="list-icon">⚡</i>
             Use quick actions for faster status updates
-          </li>
-          <li>
-            <i class="list-icon">👥</i>
-            Register new students using the "Add New User" button
           </li>
         </ul>
       </div>
