@@ -123,7 +123,7 @@ export class AuthService {
   }
 
   register(credentials: NewUserCredentials): Observable<any> {
-    return this.http.post(`${this.apiUrl}/auth/new_user`, credentials);
+    return this.http.post(`${this.apiUrl}/auth/`, credentials);
   }
 
   login(credentials: UserLogin): Observable<any> {
