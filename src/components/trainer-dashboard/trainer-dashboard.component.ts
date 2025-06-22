@@ -76,10 +76,13 @@ export class TrainerDashboardComponent implements OnInit {
     });
   }
 
-  // New method to navigate to registration page
-  addNewUser(): void {
-    this.router.navigate(['/register']);
-  }
+  
+ addNewUser(): void {
+  // Navigate to registration and return back after success
+  this.router.navigate(['/register'], {
+    queryParams: { returnUrl: '/trainer-dashboard' }
+  });
+}
 
   logout(): void {
     this.authService.logout();
