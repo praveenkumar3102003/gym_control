@@ -9,7 +9,7 @@ import { User, NewUserCredentials, UserLogin, LoginResponse } from '../models/us
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'https://t0806zkn-8000.inc1.devtunnels.ms';
+  private apiUrl = 'https://sakthibillionaire-gym.hf.space';
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   private tokenSubject = new BehaviorSubject<string | null>(null);
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
@@ -111,7 +111,7 @@ export class AuthService {
     });
 
     // Try to get current user info to validate token
-    return this.http.get<any>(`${this.apiUrl}/auth/me`, { headers }).pipe(
+    return this.http.get<any>(`${this.apiUrl}/me`, { headers }).pipe(
       tap(response => {
         console.log('Token validation response:', response);
       }),
@@ -123,11 +123,11 @@ export class AuthService {
   }
 
   register(credentials: NewUserCredentials): Observable<any> {
-    return this.http.post(`${this.apiUrl}/auth/`, credentials);
+    return this.http.post(`${this.apiUrl}/register`, credentials);
   }
 
   login(credentials: UserLogin): Observable<any> {
-    return this.http.post(`${this.apiUrl}/auth/login`, credentials).pipe(
+    return this.http.post(`${this.apiUrl}/login`, credentials).pipe(
       tap((response: any) => {
         console.log('Login response:', response);
         
@@ -184,7 +184,7 @@ export class AuthService {
       return throwError(() => new Error('No refresh token available'));
     }
 
-    return this.http.post<any>(`${this.apiUrl}/auth/refresh`, {
+    return this.http.post<any>(`${this.apiUrl}/refresh`, {
       refresh_token: refreshToken
     }).pipe(
       tap(response => {
@@ -217,7 +217,7 @@ export class AuthService {
     // Optionally call logout endpoint
     const token = this.getStoredToken();
     if (token) {
-      this.http.post(`${this.apiUrl}/auth/logout`, {}, {
+      this.http.post(`${this.apiUrl}/logout`, {}, {
         headers: this.getAuthHeaders()
       }).subscribe({
         complete: () => {
@@ -306,11 +306,11 @@ export class AuthService {
 
   // Updated gym methods to use authenticated requests
   getGymStatus(): Observable<any> {
-    return this.authenticatedRequest('GET', '/gym/status');
+    return this.authenticatedRequest('GET', '/gym-status');
   }
 
   updateGymStatus(status: string): Observable<any> {
-    return this.authenticatedRequest('POST', '/gym/updates', { status });
+    return this.authenticatedRequest('POST', '/gym-status', { status });
   }
 
   getUsers(): Observable<any> {

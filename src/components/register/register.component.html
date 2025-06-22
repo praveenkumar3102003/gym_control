@@ -2,21 +2,29 @@
   <div class="register-wrapper">
     <div class="card register-card">
       <div class="text-center mb-3">
+        <div class="logo-container">
+          <div class="gym-icon">💪</div>
+        </div>
         <h1 class="register-title">Join Gym Flow</h1>
-        <p class="register-subtitle">Create your account</p>
+        <p class="register-subtitle">Create your student account and start your fitness journey</p>
       </div>
 
       <div *ngIf="errorMessage" class="alert alert-error">
+        <i class="error-icon">⚠️</i>
         {{ errorMessage }}
       </div>
 
       <div *ngIf="successMessage" class="alert alert-success">
+        <i class="success-icon">✅</i>
         {{ successMessage }}
       </div>
 
       <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
         <div class="form-group">
-          <label for="name" class="form-label">Full Name</label>
+          <label for="name" class="form-label">
+            <i class="label-icon">👤</i>
+            Full Name
+          </label>
           <input
             type="text"
             id="name"
@@ -29,7 +37,10 @@
         </div>
 
         <div class="form-group">
-          <label for="email" class="form-label">Email Address</label>
+          <label for="email" class="form-label">
+            <i class="label-icon">✉️</i>
+            Email Address
+          </label>
           <input
             type="email"
             id="email"
@@ -43,21 +54,10 @@
         </div>
 
         <div class="form-group">
-          <label for="role" class="form-label">Role</label>
-          <select
-            id="role"
-            name="role"
-            class="form-control"
-            [(ngModel)]="registerData.role"
-            required
-          >
-            <option value="Student">Student</option>
-            <option value="trainer">Trainer</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="password" class="form-label">Password</label>
+          <label for="password" class="form-label">
+            <i class="label-icon">🔒</i>
+            Password
+          </label>
           <input
             type="password"
             id="password"
@@ -66,12 +66,15 @@
             [(ngModel)]="registerData.password"
             required
             minlength="6"
-            placeholder="Enter your password"
+            placeholder="Enter your password (min 6 characters)"
           />
         </div>
 
         <div class="form-group">
-          <label for="confirmPassword" class="form-label">Confirm Password</label>
+          <label for="confirmPassword" class="form-label">
+            <i class="label-icon">🔐</i>
+            Confirm Password
+          </label>
           <input
             type="password"
             id="confirmPassword"
@@ -83,21 +86,35 @@
           />
         </div>
 
+        <div class="role-info">
+          <i class="info-icon">🎓</i>
+          <span>You're registering a Student</span>
+        </div>
+
         <button 
-          type="submit" 
+          type="submit"
           class="btn btn-primary register-btn"
           [disabled]="isLoading || !registerForm.valid"
         >
-          <span *ngIf="isLoading">Creating Account...</span>
-          <span *ngIf="!isLoading">Create Account</span>
+          <span *ngIf="isLoading" class="loading-content">
+            <i class="loading-spinner">⏳</i>
+            Creating Account...
+          </span>
+          <span *ngIf="!isLoading" class="button-content">
+            <i class="button-icon">🚀</i>
+            Create Account
+          </span>
         </button>
       </form>
 
-      <div class="text-center mt-3">
-        <p>Already have an account? 
-          <a routerLink="/login" class="login-link">Sign in here</a>
+      <!-- <div class="text-center mt-3">
+        <p class="login-prompt">Already have an account? 
+          <a routerLink="/login" class="login-link">
+            <i class="link-icon">🔑</i>
+            Sign in here
+          </a>
         </p>
-      </div>
+      </div> -->
     </div>
   </div>
 </div>

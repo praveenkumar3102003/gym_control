@@ -15,7 +15,7 @@ import { NewUserCredentials } from '../../models/user.model';
 export class RegisterComponent {
   registerData: NewUserCredentials = {
     name: '',
-    role: 'Student',
+    role: 'Student', // Default role set to Student
     email: '',
     password: ''
   };
@@ -42,6 +42,9 @@ export class RegisterComponent {
       this.errorMessage = 'Password must be at least 6 characters long';
       return;
     }
+
+    // Ensure role is always Student
+    this.registerData.role = 'Student';
 
     this.isLoading = true;
     this.errorMessage = '';

@@ -76,6 +76,11 @@ export class TrainerDashboardComponent implements OnInit {
     });
   }
 
+  // New method to navigate to registration page
+  addNewUser(): void {
+    this.router.navigate(['/register']);
+  }
+
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
