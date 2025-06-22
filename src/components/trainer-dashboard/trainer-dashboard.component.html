@@ -1,170 +1,128 @@
-<div class="container">
+<div class="dashboard-wrapper">
   <div class="dashboard-header">
     <div class="header-content">
       <div class="welcome-section">
         <div class="trainer-avatar">👨‍🏫</div>
-        <h1 class="dashboard-title">Welcome, {{ user?.name }}!</h1>
-        <p class="user-role">{{ user?.role | titlecase }} Dashboard</p>
+        <div>
+          <h1 class="dashboard-title">Welcome, {{ user?.name }}!</h1>
+          <p class="user-role">{{ user?.role | titlecase }} Dashboard</p>
+        </div>
       </div>
-      <div class="header-actions">
-        <button class="btn btn-danger logout-btn" (click)="logout()">
-          <i class="btn-icon">🚪</i>
-          Logout
-        </button>
-      </div>
+      <button class="btn btn-danger logout-btn" (click)="logout()">
+        <i class="btn-icon">🚪</i>
+        Logout
+      </button>
     </div>
   </div>
 
   <div class="dashboard-grid">
-    <!-- Gym Status Management Section -->
-    <div class="status-management-section">
-      <div class="card status-card">
-        <div class="card-header">
-          <div class="card-icon">🏋️‍♂️</div>
-          <h2 class="card-title">Gym Status Management</h2>
+    <!-- Gym Status Section -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-icon">🏋️‍♂️</span>
+        <h2 class="card-title">Gym Status Management</h2>
+      </div>
+
+      <div *ngIf="errorMessage" class="alert alert-error">
+        <i class="alert-icon">⚠️</i> {{ errorMessage }}
+      </div>
+      <div *ngIf="successMessage" class="alert alert-success">
+        <i class="alert-icon">✅</i> {{ successMessage }}
+      </div>
+
+      <div class="current-status">
+        <h3 class="section-title"><i>📊</i> Current Status</h3>
+
+        <div *ngIf="isLoading" class="loading-spinner">
+          <div class="spinner"></div>
+          <p>Loading...</p>
         </div>
 
-        <div *ngIf="errorMessage" class="alert alert-error">
-          <i class="alert-icon">⚠️</i>
-          {{ errorMessage }}
+        <div *ngIf="!isLoading" class="status-display">
+          <span 
+            class="status-badge"
+            [ngClass]="{
+              'status-open': currentGymStatus === 'open',
+              'status-closed': currentGymStatus === 'closed' || currentGymStatus === 'unknown'
+            }"
+          >
+            <i class="status-icon">
+              <ng-container *ngIf="currentGymStatus === 'open'">🏃‍♂️</ng-container>
+              <ng-container *ngIf="currentGymStatus === 'closed'">🔒</ng-container>
+              <ng-container *ngIf="currentGymStatus === 'unknown'">❓</ng-container>
+            </i>
+            {{ currentGymStatus | titlecase }}
+          </span>
+          <p class="last-updated" *ngIf="lastUpdated">
+            🕒 Last updated: <strong>{{ lastUpdated }}</strong>
+          </p>
         </div>
+      </div>
 
-        <div *ngIf="successMessage" class="alert alert-success">
-          <i class="alert-icon">✅</i>
-          {{ successMessage }}
-        </div>
+      <form (ngSubmit)="updateGymStatus()" class="update-form">
+        <label for="newStatus" class="form-label">🎯 Select New Status</label>
+        <select
+          id="newStatus"
+          class="form-control"
+          [(ngModel)]="newStatus"
+          name="newStatus"
+          required
+        >
+          <option value="open">🏃‍♂️ Open</option>
+          <option value="closed">🔒 Closed</option>
+        </select>
 
-        <div class="current-status-section">
-          <h3 class="section-title">
-            <i class="section-icon">📊</i>
-            Current Status
-          </h3>
+        <button 
+          type="submit" 
+          class="btn btn-success full-width"
+          [disabled]="isUpdating || !newStatus || newStatus === currentGymStatus"
+        >
+          <ng-container *ngIf="isUpdating">
+            <i class="loading-spinner-small">⏳</i> Updating...
+          </ng-container>
+          <ng-container *ngIf="!isUpdating">
+            <i class="btn-icon">🚀</i> Update Gym Status
+          </ng-container>
+        </button>
+      </form>
+    </div>
 
-          <div *ngIf="isLoading" class="loading-spinner">
-            <div class="spinner"></div>
-            <p>Loading current status...</p>
-          </div>
-
-          <div *ngIf="!isLoading" class="current-status-display">
-            <div class="status-indicator">
-              <span 
-                class="status-badge"
-                [ngClass]="{
-                  'status-open': currentGymStatus === 'open',
-                  'status-closed': currentGymStatus === 'closed' || currentGymStatus === 'unknown'
-                }"
-              >
-                <span class="status-icon">
-                  <span *ngIf="currentGymStatus === 'open'">🏃‍♂️</span>
-                  <span *ngIf="currentGymStatus === 'closed'">🔒</span>
-                  <span *ngIf="currentGymStatus === 'unknown'">❓</span>
-                </span>
-                {{ currentGymStatus | titlecase }}
-              </span>
-            </div>
-            <p class="last-updated" *ngIf="lastUpdated">
-              <i class="time-icon">🕒</i>
-              Last updated: <strong>{{ lastUpdated }}</strong>
-            </p>
-          </div>
-        </div>
-
-        <div class="status-update-section">
-          <h3 class="section-title">
-            <i class="section-icon">🔄</i>
-            Update Status
-          </h3>
-          <form (ngSubmit)="updateGymStatus()" class="update-form">
-            <div class="form-group">
-              <label for="newStatus" class="form-label">
-                <i class="label-icon">🎯</i>
-                Select New Status
-              </label>
-              <select
-                id="newStatus"
-                name="newStatus"
-                class="form-control"
-                [(ngModel)]="newStatus"
-                required
-              >
-                <option value="open">🏃‍♂️ Open</option>
-                <option value="closed">🔒 Closed</option>
-              </select>
-            </div>
-
-            <button 
-              type="submit" 
-              class="btn btn-success update-btn"
-              [disabled]="isUpdating || !newStatus || newStatus === currentGymStatus"
-            >
-              <span *ngIf="isUpdating" class="loading-content">
-                <i class="loading-spinner-small">⏳</i>
-                Updating...
-              </span>
-              <span *ngIf="!isUpdating" class="button-content">
-                <i class="btn-icon">🚀</i>
-                Update Gym Status
-              </span>
-            </button>
-          </form>
-        </div>
+    <!-- Quick Actions -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-icon">⚡</span>
+        <h2 class="card-title">Quick Actions</h2>
+      </div>
+      <div class="quick-buttons">
+        <button 
+          class="btn btn-success"
+          (click)="newStatus = 'open'; updateGymStatus()"
+          [disabled]="isUpdating || currentGymStatus === 'open'"
+        >
+          🏃‍♂️ Open Gym
+        </button>
+        <button 
+          class="btn btn-warning"
+          (click)="newStatus = 'closed'; updateGymStatus()"
+          [disabled]="isUpdating || currentGymStatus === 'closed'"
+        >
+          🔒 Close Gym
+        </button>
       </div>
     </div>
 
-    <!-- Quick Actions Section -->
-    <div class="quick-actions">
-      <div class="card actions-card">
-        <div class="card-header">
-          <div class="card-icon">⚡</div>
-          <h3 class="card-title">Quick Actions</h3>
-        </div>
-        <div class="action-buttons">
-          <button 
-            class="btn btn-success quick-action-btn open-btn"
-            (click)="newStatus = 'open'; updateGymStatus()"
-            [disabled]="isUpdating || currentGymStatus === 'open'"
-          >
-            <i class="btn-icon">🏃‍♂️</i>
-            <span>Open Gym</span>
-          </button>
-          <button 
-            class="btn btn-warning quick-action-btn close-btn"
-            (click)="newStatus = 'closed'; updateGymStatus()"
-            [disabled]="isUpdating || currentGymStatus === 'closed'"
-          >
-            <i class="btn-icon">🔒</i>
-            <span>Close Gym</span>
-          </button>
-        </div>
+    <!-- Guidelines -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-icon">📋</span>
+        <h2 class="card-title">Trainer Guidelines</h2>
       </div>
-    </div>
-
-    <!-- Trainer Guidelines Section -->
-    <div class="trainer-info">
-      <div class="card info-card">
-        <div class="card-header">
-          <div class="card-icon">📋</div>
-          <h3 class="card-title">Trainer Guidelines</h3>
-        </div>
-        <ul class="info-list">
-          <li>
-            <i class="list-icon">🔄</i>
-            Update gym status at the beginning and end of each session
-          </li>
-          <li>
-            <i class="list-icon">🔒</i>
-            Ensure gym is marked as "Closed" when no supervision is available
-          </li>
-          <li>
-            <i class="list-icon">📅</i>
-            Students rely on these updates to plan their workout schedules
-          </li>
-          <li>
-            <i class="list-icon">⚡</i>
-            Use quick actions for faster status updates
-          </li>
-        </ul>
-      </div>
+      <ul class="info-list">
+        <li>🔄 Update gym status at the beginning and end of each session</li>
+        <li>🔒 Ensure gym is marked "Closed" when unsupervised</li>
+        <li>📅 Students rely on status for planning</li>
+        <li>⚡ Use quick actions for efficiency</li>
+      </ul>
     </div>
   </div>
 </div>
