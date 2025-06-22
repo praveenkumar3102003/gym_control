@@ -54,7 +54,7 @@ export class RegisterComponent {
         this.isLoading = false;
         this.successMessage = 'Registration successful! Please log in.';
         setTimeout(() => {
-          this.router.navigate(['/login']);
+          this.router.navigate(['/trainer-dashboard']);
         }, 2000);
       },
       error: (error) => {
